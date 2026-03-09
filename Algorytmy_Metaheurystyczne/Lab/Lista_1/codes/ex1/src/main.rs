@@ -1,14 +1,16 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
+use rand::seq::SliceRandom; 
+use rand::thread_rng;
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct City {
     x: f64,
     y: f64,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Permutation {
     cities: Vec<City>,
 }
@@ -56,9 +58,17 @@ fn load_data(path: &str) -> Vec<City> {
 }
 
 fn main() {
-    let cities_coords = load_data("../../data/western_sahara.tsp");
+    let cities_coords = load_data("../../data/western_sahara.tsp"); //example for western_sahara file
 
-    for city in cities_coords {
-        println!("{:?}", city);
+    let mut rng = thread_rng();
+    let mut all_permutations = Vec::new();
+    for _ in 0..1000 {
+        let mut perm = cities_coords.clone();
+        perm.shuffle(&mut rng);
+        all_permutations.push(Permutation { cities: perm });
+    }
+
+    for permutation in all_permutations {
+        println!("Distance: {}", permutation.distance());
     }
 }
