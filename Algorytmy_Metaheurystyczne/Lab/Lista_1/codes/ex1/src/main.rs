@@ -57,6 +57,19 @@ fn load_data(path: &str) -> Vec<City> {
     cities
 }
 
+fn avg_result(how_many_draws: usize, permutations: Vec<f64>) -> f64 { //how many draws is a parameter that tells us how many draws there are in one group
+    if how_many_draws == 1 {
+        return permutations.iter().min_by(|a, b| a.total_cmp(b)).copied().unwrap_or(0.0);
+    } else {
+        let mut group_avg = 0.0;
+        for group in permutations.chunks(how_many_draws) {
+            let group_min = group.iter().min_by(|a, b| a.total_cmp(b)).copied().unwrap_or(0.0);
+            group_avg += group_min;
+        }
+        group_avg / (permutations.len() as f64 / how_many_draws as f64)
+    }
+}
+
 fn main() {
     let cities_coords = load_data("../../data/western_sahara.tsp"); //example for western_sahara file
 
@@ -68,7 +81,8 @@ fn main() {
         all_permutations.push(Permutation { cities: perm });
     }
 
-    for permutation in all_permutations {
-        println!("Distance: {}", permutation.distance());
-    }
+    let distances: Vec<f64> = all_permutations.iter().map(|p| p.distance()).collect();
+
+    let result = avg_result(50, distances); 
+    println!("Average result: {}", result);
 }
