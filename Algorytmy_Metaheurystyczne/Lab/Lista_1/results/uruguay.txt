@@ -1,0 +1,3 @@
+Average result with 100 groups: 1596928
+Average result with 20 groups: 1578451
+Average result with 1 group: 1553262
