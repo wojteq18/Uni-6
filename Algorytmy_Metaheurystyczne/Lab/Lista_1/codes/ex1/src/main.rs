@@ -98,5 +98,5 @@ fn main() {
 
     println!("Average result with 100 groups: {}", result100);
     println!("Average result with 20 groups: {}", result50);
-    println!("Average result with 1 group: {}", result1);
+    println!("Average result with 1 groups: {}", result1);
 }
