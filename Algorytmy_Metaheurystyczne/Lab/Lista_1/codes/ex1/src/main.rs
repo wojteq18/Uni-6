@@ -16,14 +16,23 @@ struct Permutation {
 }
 
 impl Permutation {
-    fn distance(&self) -> f64 {
-        let mut total_distance: f64 = 0.0;
+    fn distance(&self) -> u64 {
+        let mut total: u64 = 0;
+
         for i in 0..self.cities.len() {
-            let city_a = &self.cities[i];
-            let city_b = &self.cities[(i + 1) % self.cities.len()]; // Wrap around to the first city
-            total_distance += ((city_b.x - city_a.x).powi(2) + (city_b.y - city_a.y).powi(2)).sqrt();
+            let a = &self.cities[i];
+            let b = &self.cities[(i + 1) % self.cities.len()];
+
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let d = (dx * dx + dy * dy).sqrt();
+
+            let w = (d + 0.5).floor() as u64;
+
+            total += w;
         }
-        total_distance
+
+        total
     }
 }
 
@@ -57,21 +66,21 @@ fn load_data(path: &str) -> Vec<City> {
     cities
 }
 
-fn avg_result(how_many_draws: usize, permutations: Vec<f64>) -> f64 { //how many draws is a parameter that tells us how many draws there are in one group
+fn avg_result(how_many_draws: usize, permutations: &Vec<u64>) -> u64 { //how many draws is a parameter that tells us how many draws there are in one group
     if how_many_draws == 1 {
-        return permutations.iter().min_by(|a, b| a.total_cmp(b)).copied().unwrap_or(0.0);
+        return *permutations.iter().min().unwrap_or(&0);
     } else {
-        let mut group_avg = 0.0;
+        let mut group_avg = 0u64;
         for group in permutations.chunks(how_many_draws) {
-            let group_min = group.iter().min_by(|a, b| a.total_cmp(b)).copied().unwrap_or(0.0);
+            let group_min = group.iter().min().unwrap_or(&0);
             group_avg += group_min;
         }
-        group_avg / (permutations.len() as f64 / how_many_draws as f64)
+        group_avg / (permutations.len() as u64 / how_many_draws as u64)
     }
 }
 
 fn main() {
-    let cities_coords = load_data("../../data/western_sahara.tsp"); //example for western_sahara file
+    let cities_coords = load_data("../../data/zimbabwe.tsp"); //example for western_sahara file
 
     let mut rng = thread_rng();
     let mut all_permutations = Vec::new();
@@ -81,8 +90,13 @@ fn main() {
         all_permutations.push(Permutation { cities: perm });
     }
 
-    let distances: Vec<f64> = all_permutations.iter().map(|p| p.distance()).collect();
+    let distances: Vec<u64> = all_permutations.iter().map(|p| p.distance()).collect();
 
-    let result = avg_result(50, distances); 
-    println!("Average result: {}", result);
+    let result100 = avg_result(10, &distances);
+    let result50 = avg_result(50, &distances);
+    let result1 = avg_result(1, &distances);
+
+    println!("Average result with 100 groups: {}", result100);
+    println!("Average result with 20 groups: {}", result50);
+    println!("Average result with 1 group: {}", result1);
 }
