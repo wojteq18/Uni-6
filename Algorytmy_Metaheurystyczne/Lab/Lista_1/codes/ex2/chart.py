@@ -2,7 +2,7 @@ import re
 import matplotlib.pyplot as plt
 
 
-with open("../../results/djibouti.txt", "r", encoding="utf-8") as f:
+with open("../../results/zimbabwe.txt", "r", encoding="utf-8") as f:
     text = f.read()
 
 pattern = re.compile(r"Average result with\s+(\d+)\s+groups:\s+(\d+)")
@@ -23,7 +23,7 @@ plt.figure(figsize=(7, 4))
 labels = [f"{g}" for g in groups]
 bars = plt.bar(labels, values)
 
-plt.title("Result: Djibouti")
+plt.title("Result: Zimbabwe")
 plt.xlabel("Amount of groups")
 plt.ylabel("Value (route length)")
 

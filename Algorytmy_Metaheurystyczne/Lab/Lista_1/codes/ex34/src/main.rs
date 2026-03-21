@@ -134,7 +134,7 @@ fn dfs(u: usize, adj: &Vec<Vec<usize>>, visited: &mut Vec<bool>, tour: &mut Vec<
 }
 
 fn main() {
-    let all_cities = load_data("../../data/zimbabwe.tsp");
+    let all_cities = load_data("../../data/uruguay.tsp");
     let all_edges = all_edges(&all_cities);
     let sorted_edges = sort_by_weight(all_edges);
     let kruskal_edges = kruskal(all_cities.len(), sorted_edges);

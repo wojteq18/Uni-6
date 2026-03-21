@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs} % Dla ładniejszych linii w tabeli
+\usepackage{array}
+
+
+
+
+\title{Algorytmy metaheurystyczne - Lista 0}
+\author{Wojciech Typer - 279730}
+\date{}
+
+\begin{document}
+\maketitle
+
+\subsection*{1000 losowych permutacji}
+Na poniższych wykresach przedstawiono uzyskane rezultaty dla: Dżibuti, Kataru, Urugwaju, Sahary Zachodniej oraz zimbabwe. \\
+Na osi X zaznaczono ilość grup, a na osi Y średnią z minimów uzyskanych dla konkretnych grup.
+
+\vspace{2\baselineskip}
+
+\begin{figure}[H]
+    \centering
+    
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/results/djibouti.png}
+        \caption{Dżibuti}
+        \label{fig:djibouti}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/results/qatar.png}
+        \caption{Katar}
+        \label{fig:qatar}
+    \end{minipage}
+
+    \vspace{0.5cm}
+
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/results/uruguay.png}
+        \caption{Urugwaj}
+        \label{fig:uruguay}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/results/western_sahara.png}
+        \caption{Sahara Zachodnia}
+        \label{fig:western_sahara}
+    \end{minipage}
+
+    \vspace{0.5cm}
+
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/results/zimbabwe.png}
+        \caption{Zimbabwe}
+        \label{fig:zimbabwe}
+    \end{minipage}
+
+    \caption{Zestawienie wyników dla wszystkich analizowanych państw}
+    \label{fig:wszystkie_wyniki}
+\end{figure}
+
+\newpage
+W uzyskanych wynikach czasem dochodzi do sytuacji w której drogi się krzyżują, co jest niepoządane. Taki problem można jednak rozwiązaćw następujący sposób: \\
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \draw[thick] (0,0) -- (4,4);
+            \draw[thick] (0,4) -- (4,0);
+            
+            \filldraw[black] (0,0) circle (3pt) node[anchor=north east] {A};
+            \filldraw[black] (4,4) circle (3pt) node[anchor=south west] {B};
+            \filldraw[black] (0,4) circle (3pt) node[anchor=south east] {C};
+            \filldraw[black] (4,0) circle (3pt) node[anchor=north west] {D};
+            \filldraw[red] (2,2) circle (3pt) node[anchor=south] {X};
+            
+            \draw[->, thick] (0.5,0.5) -- (1.5,1.5);
+            \draw[->, thick] (2.5,2.5) -- (3.5,3.5);
+            \draw[->, thick] (0.5,3.5) -- (1.5,2.5);
+            \draw[->, thick] (2.5,1.5) -- (3.5,0.5);
+        \end{tikzpicture}
+        \caption{Krzyżujące się krawędzie}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \draw[thick] (0,0) -- (0,4);
+            \draw[thick] (4,0) -- (4,4);
+            
+            \draw[dashed, gray] (0,0) -- (4,4);
+            \draw[dashed, gray] (0,4) -- (4,0);
+            
+            \filldraw[black] (0,0) circle (3pt) node[anchor=north east] {A};
+            \filldraw[black] (4,4) circle (3pt) node[anchor=south west] {B};
+            \filldraw[black] (0,4) circle (3pt) node[anchor=south east] {C};
+            \filldraw[black] (4,0) circle (3pt) node[anchor=north west] {D};
+            
+            \draw[->, thick] (0,1.5) -- (0,2.5);
+            \draw[->, thick] (4,1.5) -- (4,2.5);
+        \end{tikzpicture}
+        \caption{Połączenie optymalne}
+    \end{minipage}
+    \label{fig:2opt_improvement}
+\end{figure}
+Na rysunku 7 przedstawiono rozwiązanie nieoptymalne, w którym drogi A-B i C-D krzyżują się w punkcie X. Aby poprawić to rozwiązanie, można zastosować metodę 2-opt, która polega na zamianie końcówek dwóch krawędzi. W tym przypadku, zamiast łączyć A z B i C z D, można połączyć A z C oraz D z B. Dzięki temu drogi nie będą się krzyżować, co może prowadzić do lepszego rozwiązania problemu.
+
+\vspace{2\baselineskip}
+
+\subsection*{Cykl komiwojażera na podstawie MST}
+Na poniższym wykresie przedstawiono wyniki znalezionego cyklu komiwojażera na podstawie MSTdla wszystkich analizowanych państw:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/results/ex4_results.png}
+    \caption{Cykl komiwojażera na podstawie MST}
+    \label{fig:obrazek1}
+\end{figure}
+
+\vspace{2\baselineskip}
+
+Na podstawie uzyskanych wyników, można stwierdzić, że wynik uzykany na podstawie minimalnego drzewa rozpinającego jest znacznie lepszy od wyników uzyskanych dla losowych permutacji. 
+
+\end{document}

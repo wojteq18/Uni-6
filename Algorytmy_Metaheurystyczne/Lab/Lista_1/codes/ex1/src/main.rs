@@ -80,7 +80,7 @@ fn avg_result(how_many_draws: usize, permutations: &Vec<u64>) -> u64 { //how man
 }
 
 fn main() {
-    let cities_coords = load_data("../../data/zimbabwe.tsp"); //example for western_sahara file
+    let cities_coords = load_data("../../data/uruguay.tsp"); //example for western_sahara file
 
     let mut rng = thread_rng();
     let mut all_permutations = Vec::new();
