@@ -27,7 +27,7 @@ impl Dsu {
         if self.parent[i] == i {
             return i;
         }
-        self.parent[i] = self.find(self.parent[i]);
+        self.parent[i] = self.find(self.parent[i]); //track compression
         self.parent[i]
     }
 
@@ -134,7 +134,7 @@ fn dfs(u: usize, adj: &Vec<Vec<usize>>, visited: &mut Vec<bool>, tour: &mut Vec<
 }
 
 fn main() {
-    let all_cities = load_data("../../data/western_sahara.tsp");
+    let all_cities = load_data("../../data/zimbabwe.tsp");
     let all_edges = all_edges(&all_cities);
     let sorted_edges = sort_by_weight(all_edges);
     let kruskal_edges = kruskal(all_cities.len(), sorted_edges);

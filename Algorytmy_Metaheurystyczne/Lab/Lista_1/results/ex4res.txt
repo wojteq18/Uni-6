@@ -1,0 +1,5 @@
+djibouti - 8718
+qatar - 12237
+uruguay - 108140
+western_sahara - 35609
+zimbabwe - 130424
