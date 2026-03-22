@@ -99,12 +99,21 @@ fn find_best_neighbour(permutation: &mut Permutation) -> Option<(usize, usize)> 
 }
 
 fn main() {
-    let cities = load_data("../../data/canada.tsp");
+    let cities = load_data("../../data/oman.tsp");
     let mut permutation = Permutation { cities };
     let mut rng = thread_rng();
+    let mut iteration = 0;
     permutation.cities.shuffle(&mut rng);
-    let curr_best_move = find_best_neighbour(&mut permutation);
-    println!("Distance: {}", permutation.distance());
-    println!("Best move: {:?}", curr_best_move);
+    println!("Initial distance: {}", permutation.distance());
+    loop {
+        if let Some((i, j)) = find_best_neighbour(&mut permutation) {
+            permutation.invert(i, j);
+            iteration += 1;
+        } else {
+            break;
+        }
+    }
+    println!("Final distance: {}", permutation.distance());
+    println!("Iterations: {}", iteration);
 
 }
