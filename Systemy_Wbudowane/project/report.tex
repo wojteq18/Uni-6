@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs} % Dla ładniejszych linii w tabeli
+\usepackage{array}
+
+\title{Dokumentacja Systemu Wbudowanego: Wejściowa bramka biletowa dla Metra w Ałmatach}
+\author{Wojciech Typer, Tomasz Stefaniak}
+
+\begin{document}
+\maketitle
+
+\begin{figure}[H]
+    \centering
+    % Skalujemy obrazek do 80% szerokości tekstu
+    \includegraphics[width=0.1\textwidth]{/home/wojteq18/Uni-6/Systemy_Wbudowane/project/Almaty_metro_logo.svg.png}
+    \label{fig:obrazek1}
+\end{figure}
+
+\section*{Wstęp}
+Celem tego dokumentu jest przedstawienie funkcjonalności i wymagań systemu wbudowanego, który został zaprojektowany jako bramka biletiwa dla metra. System ten ma na celu automatyzację procesu weryfikacji biletów oraz kontrolę dostępu do stacji metra, zapewniając jednocześnie bezpieczeństwo dla pasażerów.
+
+\subsection*{Funkcjonalności podstawowe:}
+\begin{itemize}
+    \item Przepuszczanie pasażera poprzez otwarcie bariery, jeśli przyłożony bilet jest ważny.
+    \item Nawiązywanie połączenia z bazą danych w czasie rzeczywistym w celu weryfikacji ważności biletu.
+\end{itemize}
+
+\subsection*{Funkcjonalności wtórne:}
+\begin{itemize}
+    \item Automatyczne wydłużenie czasu na przejście w przypadku wykrycia biletu dziecięcego lub dla seniora.
+    \item Wyświetlanie komunikatu informującego, do kiedy bilet był ważny (w przypadku wykrycia nieważnego biletu).
+    \item Wyświetlanie informacji o liczbie pozostałych przejazdów w przypadku użycia biletu wieloprzejazdowego.
+\end{itemize}
+
+\subsection*{W jaki sposób realizuje założenia?}
+System realizuje swoje założenia przetwarzając wejścia na wyjścia:
+\begin{itemize}
+    \item \textbf{Wejścia:} Odczyt z nośnika biletu, zapytania wysyłane do bazy danych.
+    \item \textbf{Wyjścia:} Mechaniczne sterowanie zamknięciem/otwarciem drzwi bramki, wyświetlanie komunikatów na ekranie powitalnym, sygnały dźwiękowe autoryzacji lub odrzucenia.
+    \item \textbf{Zależności:} Jedne funkcje zależą od drugich. Na przykład, rodzaj zidentyfikowanego biletu na wejściu (bilet seniora) warunkuje dłuższą pracę timera blokującego zamknięcie bramki na wyjściu.
+\end{itemize}
+
+\subsection*{Środowisko i ograniczenia}
+System funkcjonuje na stacjach metra (najczęściej pod ziemią). Należy zastanowić się, jakie zagrożenia niesie ze sobą praca w takim środowisku. Obejmują one m.in. wysoką wilgotność, osadzanie się pyłu z tuneli oraz ogromne obciążenie mechaniczne w godzinach szczytu. Zgodnie z wytycznymi, należy uwzględnić ograniczenia i wymogi prawne (normy) dla tego systemu – bramka musi np. spełniać rygorystyczne przepisy ewakuacyjne PPOŻ (bezwarunkowe, automatyczne otwarcie w przypadku pożaru lub zaniku zasilania).
+
+\subsection*{Kto korzysta z systemu i w jaki sposób?}
+Każdy użytkownik inaczej wchodzi w interakcję z systemem, co wymaga oddzielnego ujęcia:
+\begin{itemize}
+    \item \textbf{Pasażer (Dorośli, Dzieci, Seniorzy):} Inicjuje proces poprzez przyłożenie biletu. Oczekuje natychmiastowej reakcji, weryfikacji oraz informacji zwrotnej.
+    \item \textbf{Obsługa stacji / Konserwator:} Używają kart serwisowych do blokowania przejścia w celu naprawy mechanizmów lub audytu logów błędów.
+\end{itemize}
+
+\end{document}
