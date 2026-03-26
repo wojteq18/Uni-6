@@ -15,11 +15,23 @@ void setup() {
   Serial.println("Back: ZXC");
   Serial.println("Stop: S");
 
+  delay(5001);
+  for (int i = 0; i < 100; i++) {
+    w.goForward(100);
+    w.stop();
+    delay(50);
+    w.goBack(100);
+    w.stop();
+    delay(50);   
+  }    
 }
 
 void loop() {
   while(Serial.available())
   {
+    w.goForward(25);
+    w.goBack(25);
+    w.stop();
     cmd = Serial.read();
     switch(cmd)
     {
@@ -46,12 +58,12 @@ void forwardBack() {
   w.setSpeedLeft(200);
   while (!isInMove) {
     w.forward();
-    delay(1000);
+    delay(500);
     w.back();
-    delay(50);
+    delay(200);
     w.back();
-    delay(1000);
+    delay(500);
     w.forward();
-    delay(50);
+    delay(200);
   }
 }

@@ -45,6 +45,8 @@ class Wheels {
         void stop();
         void stopLeft();
         void stopRight();
+        void goForward(int);
+        void goBack(int);
         /*
          *  ustawienie prędkości obrotowej (przez PWM)
          *   - minimalna efektywna wartość 60

@@ -100,3 +100,19 @@ void Wheels::stop()
     this->stopRight();
 }
 
+void Wheels::goForward(int cm) {
+    this->setSpeedRight(200);
+    this->setSpeedLeft(200);
+
+    this->forward();
+    delay(cm * 24);
+}
+
+void Wheels::goBack(int cm) {
+    this->setSpeedRight(200);
+    this->setSpeedLeft(200);
+
+    this->back();
+    delay(cm * 24);
+}
+
