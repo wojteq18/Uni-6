@@ -1,0 +1,164 @@
+#include <Arduino.h>
+#include "Wheels.h"
+
+#define SET_MOVEMENT(side,f,b) digitalWrite( side[0], f);\
+                               digitalWrite( side[1], b)
+
+Wheels::Wheels() 
+{ 
+    isMovingDistance = false;
+    currentDirection = 0;
+    speedL = 0;
+    speedR = 0;
+    movementStartTime = 0;
+    movementDuration = 0;
+}
+
+void Wheels::attachRight(int pF, int pB, int pS)
+{
+    pinMode(pF, OUTPUT);
+    pinMode(pB, OUTPUT);
+    pinMode(pS, OUTPUT);
+    this->pinsRight[0] = pF;
+    this->pinsRight[1] = pB;
+    this->pinsRight[2] = pS;
+}
+
+void Wheels::attachLeft(int pF, int pB, int pS)
+{
+    pinMode(pF, OUTPUT);
+    pinMode(pB, OUTPUT);
+    pinMode(pS, OUTPUT);
+    this->pinsLeft[0] = pF;
+    this->pinsLeft[1] = pB;
+    this->pinsLeft[2] = pS;
+}
+
+void Wheels::setSpeedRight(uint8_t s)
+{
+    this->speedR = s; // Zapisujemy prędkość, by wyświetlić ją na LCD
+    analogWrite(this->pinsRight[2], s);
+}
+
+void Wheels::setSpeedLeft(uint8_t s)
+{
+    this->speedL = s; // Zapisujemy prędkość, by wyświetlić ją na LCD
+    analogWrite(this->pinsLeft[2], s);
+}
+
+void Wheels::setSpeed(uint8_t s)
+{
+    setSpeedLeft(s);
+    setSpeedRight(s);
+}
+
+void Wheels::attach(int pRF, int pRB, int pRS, int pLF, int pLB, int pLS)
+{
+    this->attachRight(pRF, pRB, pRS);
+    this->attachLeft(pLF, pLB, pLS);
+}
+
+void Wheels::forwardLeft() 
+{
+    SET_MOVEMENT(pinsLeft, HIGH, LOW);
+}
+
+void Wheels::forwardRight() 
+{
+    SET_MOVEMENT(pinsRight, HIGH, LOW);
+}
+
+void Wheels::backLeft()
+{
+    SET_MOVEMENT(pinsLeft, LOW, HIGH);
+}
+
+void Wheels::backRight()
+{
+    SET_MOVEMENT(pinsRight, LOW, HIGH);
+}
+
+void Wheels::forward()
+{
+    this->forwardLeft();
+    this->forwardRight();
+}
+
+void Wheels::back()
+{
+    this->backLeft();
+    this->backRight();
+}
+
+void Wheels::stopLeft()
+{
+    SET_MOVEMENT(pinsLeft, LOW, LOW);
+}
+
+void Wheels::stopRight()
+{
+    SET_MOVEMENT(pinsRight, LOW, LOW);
+}
+
+void Wheels::stop()
+{
+    this->stopLeft();
+    this->stopRight();
+    this->isMovingDistance = false;
+    this->currentDirection = 0;
+}
+
+
+void Wheels::goForward(int cm) {
+    this->setSpeedRight(200);
+    this->setSpeedLeft(200);
+    this->forward();
+    
+    this->movementDuration = cm * 24;
+    this->movementStartTime = millis();
+    this->isMovingDistance = true;
+    this->currentDirection = 1; 
+}
+
+void Wheels::goBack(int cm) {
+    this->setSpeedRight(200);
+    this->setSpeedLeft(200);
+    this->back();
+    
+    this->movementDuration = cm * 24;
+    this->movementStartTime = millis();
+    this->isMovingDistance = true;
+    this->currentDirection = -1; 
+
+}
+
+void Wheels::update() {
+    if (isMovingDistance) {
+        if (millis() - movementStartTime >= movementDuration) {
+            this->stop(); 
+        }
+    }
+}
+
+
+int Wheels::getRemainingDistance() {
+    if (!isMovingDistance) return 0;
+    
+    unsigned long elapsed = millis() - movementStartTime;
+    if (elapsed >= movementDuration) return 0; // Zabezpieczenie przed ujemnym dystansem
+    
+    unsigned long remainingTime = movementDuration - elapsed;
+    return remainingTime / 24; // Przeliczamy pozostały czas (ms) z powrotem na centymetry
+}
+
+int Wheels::getSpeedLeft() {
+    return (currentDirection == -1) ? -speedL : speedL; // Ujemna wartość podczas cofania
+}
+
+int Wheels::getSpeedRight() {
+    return (currentDirection == -1) ? -speedR : speedR; // Ujemna wartość podczas cofania
+}
+
+int Wheels::getDirection() {
+    return currentDirection;
+}
