@@ -114,7 +114,7 @@ void Wheels::goForward(int cm) {
     this->setSpeedLeft(200);
     this->forward();
     
-    this->movementDuration = cm * 24;
+    this->movementDuration = cm * 23;
     this->movementStartTime = millis();
     this->isMovingDistance = true;
     this->currentDirection = 1; 
@@ -125,7 +125,7 @@ void Wheels::goBack(int cm) {
     this->setSpeedLeft(200);
     this->back();
     
-    this->movementDuration = cm * 24;
+    this->movementDuration = cm * 23;
     this->movementStartTime = millis();
     this->isMovingDistance = true;
     this->currentDirection = -1; 
