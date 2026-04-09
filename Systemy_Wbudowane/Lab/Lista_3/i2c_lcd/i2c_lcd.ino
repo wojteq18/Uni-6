@@ -21,20 +21,23 @@ void setup() {
     delay(1000);
     lcd.clear();
 
-    for (int i = 100; i > 0; i = i - 10) {
-      w.goForward(i);
-      while (w.) {
-        w.update();
-        if (millis() - lastLcdUpdate > 200) {
-          lastLcdUpdate = millis();
-          updateLCD();
-        }
+    // Wywołujemy tylko jeden, ciągły ruch o 100 cm do przodu
+    w.goForward(100);
+      
+    // Czekamy aż autko przejedzie wyznaczony dystans
+    while (w.getRemainingDistance() > 0) {
+      w.update(); // Na bieżąco odświeżaj stan silników
+        
+      // Na bieżąco odświeżaj LCD (co 200 ms)
+      if (millis() - lastLcdUpdate > 200) {
+        lastLcdUpdate = millis();
+        updateLCD();
       }
     }
 }
 
 void loop() {
-   w.update();
+    w.update();
 
     if (Serial.available()) {
         char cmd = Serial.read(); 
@@ -65,11 +68,13 @@ void loop() {
 void updateLCD() {
     lcd.setCursor(0, 0);
     int dist = w.getRemainingDistance();
+    
     if (dist > 0) {
         lcd.print("Do celu: ");
-        if (dist < 10) lcd.print(" "); 
+        if (dist < 100) lcd.print(" "); // Kasowanie setek przy zejściu do 99
+        if (dist < 10) lcd.print(" ");  // Kasowanie dziesiątek przy zejściu do 9
         lcd.print(dist);
-        lcd.print(" cm  ");
+        lcd.print(" cm ");
     } else {
         lcd.print("Cel osiagniety  ");
     }
@@ -85,19 +90,17 @@ void updateLCD() {
     // Animacja na środku
     int dir = w.getDirection();
     if (dir == 1) {
-        lcd.print(" >");
+        lcd.print(" > ");
     } else if (dir == -1) {
-      lcd.print(" <");
+        lcd.print(" < ");
     } else {
-        lcd.print("-");
+        lcd.print(" - ");
     }
-    lcd.print(" ");
 
     // Prędkość prawa
-    lcd.print("P:");
+    lcd.print(" P:");
     int sR = w.getSpeedRight();
     if (sR >= 0 && sR < 100) lcd.print(" "); // wyrównanie
     lcd.print(sR);
     lcd.print("  "); 
 }
-
