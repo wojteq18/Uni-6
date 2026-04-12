@@ -11,40 +11,25 @@ struct City {
 
 #[derive(Debug, Clone)]
 struct Permutation {
-    cities: Vec<City>,
+    route: Vec<usize>, 
 }
 
 impl Permutation {
-    fn distance(&self) -> u64 {
+    fn distance(&self, dist_matrix: &[Vec<u64>]) -> u64 {
         let mut total: u64 = 0;
+        let n = self.route.len();
 
-        for i in 0..self.cities.len() {
-            let a = &self.cities[i];
-            let b = &self.cities[(i + 1) % self.cities.len()];
-
-            let dx = b.x - a.x;
-            let dy = b.y - a.y;
-            let d = (dx * dx + dy * dy).sqrt();
-
-            let w = (d + 0.5).floor() as u64;
-
-            total += w;
+        for i in 0..n {
+            let city_a = self.route[i];
+            let city_b = self.route[(i + 1) % n];
+            total += dist_matrix[city_a][city_b];
         }
 
         total
     }
 
     fn invert(&mut self, i: usize, j: usize) {
-        self.cities[i..=j].reverse();
-    }
-
-    fn dist_between(&self, i: usize, j: usize) -> i64 {
-        let a = &self.cities[i];
-        let b = &self.cities[j];
-        let dx = b.x - a.x;
-        let dy = b.y - a.y;
-        let d = (dx * dx + dy * dy).sqrt();
-        (d + 0.5).floor() as i64
+        self.route[i..=j].reverse(); 
     }
 }
 
@@ -78,15 +63,36 @@ fn load_data(path: &str) -> Vec<City> {
     cities
 }
 
-fn find_best_neighbour(permutation: &mut Permutation) -> Option<(usize, usize)> {
+fn count_dist_matrix(cities: &[City]) -> Vec<Vec<u64>> {
+    let mut dist_matrix = vec![vec![0; cities.len()]; cities.len()];
+
+    for i in 0..cities.len() {
+        for j in 0..cities.len() {
+            let city_a = &cities[i];
+            let city_b = &cities[j];
+            let dx = city_b.x - city_a.x;
+            let dy = city_b.y - city_a.y;
+            let d = (dx * dx + dy * dy).sqrt();
+            dist_matrix[i][j] = (d + 0.5).floor() as u64;
+        }
+    }
+    dist_matrix
+}
+
+fn find_best_neighbour(permutation: &Permutation, dist_matrix: &[Vec<u64>]) -> Option<(usize, usize)> {
     let mut best_move: Option<(usize, usize)> = None;
     let mut best_delta: i64 = 0;
-    let amount_of_cities = permutation.cities.len();
+    let n = permutation.route.len();
 
-    for i in 1..amount_of_cities - 1 {
-        for j in i+1..amount_of_cities {
-            let old_edges = permutation.dist_between(i-1, i) + permutation.dist_between(j, (j+1) % amount_of_cities);
-            let new_edges = permutation.dist_between(i-1, j) + permutation.dist_between(i, (j+1) % amount_of_cities);
+    for i in 1..n - 1 {
+        for j in i + 1..n {
+            let city_before_i = permutation.route[i - 1];
+            let city_i = permutation.route[i];
+            let city_j = permutation.route[j];
+            let city_after_j = permutation.route[(j + 1) % n];
+
+            let old_edges = dist_matrix[city_before_i][city_i] + dist_matrix[city_j][city_after_j];
+            let new_edges = dist_matrix[city_before_i][city_j] + dist_matrix[city_i][city_after_j];
             let delta = (new_edges as i64) - (old_edges as i64);
 
             if delta < best_delta {
@@ -99,21 +105,29 @@ fn find_best_neighbour(permutation: &mut Permutation) -> Option<(usize, usize)> 
 }
 
 fn main() {
-    let cities = load_data("../../data/oman.tsp");
-    let mut permutation = Permutation { cities };
+    let cities = load_data("../../data/oman.tsp"); 
+    
+    let dist_matrix = count_dist_matrix(&cities);
+    
+    let mut route: Vec<usize> = (0..cities.len()).collect();
+    
     let mut rng = thread_rng();
+    route.shuffle(&mut rng);
+    
+    let mut permutation = Permutation { route };
+    
     let mut iteration = 0;
-    permutation.cities.shuffle(&mut rng);
-    println!("Initial distance: {}", permutation.distance());
+    println!("Initial distance: {}", permutation.distance(&dist_matrix));
+    
     loop {
-        if let Some((i, j)) = find_best_neighbour(&mut permutation) {
+        if let Some((i, j)) = find_best_neighbour(&permutation, &dist_matrix) {
             permutation.invert(i, j);
             iteration += 1;
         } else {
-            break;
+            break; 
         }
     }
-    println!("Final distance: {}", permutation.distance());
+    
+    println!("Final distance: {}", permutation.distance(&dist_matrix));
     println!("Iterations: {}", iteration);
-
 }
