@@ -1,0 +1,5 @@
+Waga minimalnego drzewa rozpinającego (MST): 74109
+Uruchamiam Local Search 45 razy...
+Average value of the solution: 93088.56
+Average number of improvement steps: 532.51
+Best obtained solution: 92155

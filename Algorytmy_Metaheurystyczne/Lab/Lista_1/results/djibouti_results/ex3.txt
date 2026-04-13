@@ -1,0 +1,3 @@
+Average value of the solution: 6738.29
+Average number of improvement steps: 12.00
+Best obtained solution: 6656
