@@ -1,0 +1,10 @@
+Przejście 1: Dystans = 92363, Kroki poprawy = 2782
+Przejście 2: Dystans = 93788, Kroki poprawy = 2794
+Przejście 3: Dystans = 94589, Kroki poprawy = 2750
+Przejście 4: Dystans = 93738, Kroki poprawy = 2805
+Przejście 5: Dystans = 94766, Kroki poprawy = 2812
+
+--- PODSUMOWANIE DLA 5 URUCHOMIEŃ ---
+Średnia wartość uzyskanego rozwiązania: 93848.80
+Średnia liczba kroków poprawy: 2788.60
+Najlepsze uzyskane rozwiązanie: 92363

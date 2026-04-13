@@ -1,0 +1,3 @@
+Srednia wartosc rozwiazania: 320460.60
+Srednia liczba krokow poprawy: 4497.80
+Najlepsze uzyskane rozwiazanie: 287197

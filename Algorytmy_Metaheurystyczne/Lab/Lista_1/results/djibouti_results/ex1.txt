@@ -1,0 +1,11 @@
+Uruchamiam Local Search 5 razy...
+Przejście 1: Dystans = 6808, Kroki poprawy = 36
+Przejście 2: Dystans = 6656, Kroki poprawy = 34
+Przejście 3: Dystans = 7130, Kroki poprawy = 32
+Przejście 4: Dystans = 6891, Kroki poprawy = 34
+Przejście 5: Dystans = 6656, Kroki poprawy = 36
+
+--- PODSUMOWANIE DLA 5 URUCHOMIEŃ ---
+Średnia wartość uzyskanego rozwiązania: 6828.20
+Średnia liczba kroków poprawy: 34.40
+Najlepsze uzyskane rozwiązanie: 6656
