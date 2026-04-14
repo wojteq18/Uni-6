@@ -64,7 +64,7 @@ fn load_data(path: &str) -> Vec<City> {
     cities
 }
 
-fn draw_pair(num: usize) -> (usize, usize) { //random 2 indexes i, j with 0 < i < j < num
+fn draw_pair(num: usize) -> (usize, usize) { 
     let mut rng = thread_rng();
     let i = rng.gen_range(1..num - 1);
     let j = rng.gen_range(i + 1..num);
@@ -111,29 +111,45 @@ fn find_best_neighbour(permutation: &Permutation, dist_matrix: &[Vec<u64>]) -> O
 }
 
 fn main() {
-    let cities = load_data("../../data/oman.tsp"); 
+    let cities = load_data("../../data/ireland.tsp"); 
+    let n = cities.len();
     
     let dist_matrix = count_dist_matrix(&cities);
-    
-    let mut route: Vec<usize> = (0..cities.len()).collect();
-    
     let mut rng = thread_rng();
-    route.shuffle(&mut rng);
     
-    let mut permutation = Permutation { route };
-    
-    let mut iteration = 0;
-    println!("Initial distance: {}", permutation.distance(&dist_matrix));
-    
-    loop {
-        if let Some((i, j)) = find_best_neighbour(&permutation, &dist_matrix) {
-            permutation.invert(i, j);
-            iteration += 1;
-        } else {
-            break; 
+    let num_runs = 5;
+    let mut sum_of_distances: u64 = 0;
+    let mut sum_of_iterations: u64 = 0;
+    let mut global_best_distance: u64 = u64::MAX;
+
+    for _ in 0..num_runs {
+        let mut route: Vec<usize> = (0..n).collect();
+        route.shuffle(&mut rng);
+        let mut permutation = Permutation { route };
+        let mut iteration = 0;
+        
+        loop {
+            if let Some((i, j)) = find_best_neighbour(&permutation, &dist_matrix) {
+                permutation.invert(i, j);
+                iteration += 1;
+            } else {
+                break; 
+            }
+        }
+        
+        let final_dist = permutation.distance(&dist_matrix);
+        sum_of_distances += final_dist;
+        sum_of_iterations += iteration;
+        
+        if final_dist < global_best_distance {
+            global_best_distance = final_dist;
         }
     }
     
-    println!("Final distance: {}", permutation.distance(&dist_matrix));
-    println!("Iterations: {}", iteration);
+    let avg_distance = sum_of_distances as f64 / num_runs as f64;
+    let avg_iterations = sum_of_iterations as f64 / num_runs as f64;
+
+    println!("Srednia wartosc rozwiazania: {:.2}", avg_distance);
+    println!("Srednia liczba krokow poprawy: {:.2}", avg_iterations);
+    println!("Najlepsze uzyskane rozwiazanie: {}", global_best_distance);
 }

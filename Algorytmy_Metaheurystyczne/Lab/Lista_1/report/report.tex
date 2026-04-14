@@ -1,0 +1,200 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage[margin=1in]{geometry}
+
+
+
+
+\title{Algorytmy Metaheurystyczne - Lista 1}
+\author{Wojciech Typer}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Wprowadzenie - Algorytm Local Search}
+Algorytm Local Search (LS) jest jednym z podstawowych algorytmów metaheurystycznych, który służy do rozwiązywania problemów optymalizacyjnych. 
+Jego główną ideą jest iteracyjne przeszukiwanie przestrzeni rozwiązań, zaczynając od pewnego początkowego rozwiązania i stopniowo poprawiając 
+je poprzez lokalne modyfikacje. Algorytm ten jest prosty w implementacji i często stosowany w praktyce, zwłaszcza w przypadkach, 
+gdy przestrzeń rozwiązań jest duża i nie można jej przeszukać w całości.
+
+\section*{Problem komiwojażera (TSP)}
+Problem komiwojażera (TSP) jest klasycznym problemem optymalizacyjnym, który polega na znalezieniu najkrótszej możliwej trasy, 
+która odwiedza każde z zadanych miast dokładnie raz i wraca do punktu startowego. TSP jest problemem NP-trudnym, co oznacza, 
+że nie istnieje znany algorytm, który mógłby rozwiązać go w czasie wielomianowym dla wszystkich przypadków. 
+Algorytm Local Search może być używany do znajdowania przybliżonych rozwiązań dla TSP, poprzez iteracyjne poprawianie aktualnego rozwiązania 
+poprzez lokalne modyfikacje, takie jak zamiana kolejności odwiedzanych miast.
+
+\newpage
+
+\section*{Zadanie 1}
+% WYNIKI do wykresu:
+% Oman avg_res: 93848.80 avg_num_steps: 2788.60 best_res: 92363
+% Dżibuti avg res:6828.20 avg_num_steps: 34.40 best_res: 6656
+% Irlandia avg_res: 229621.5661093335 avg_num_steps: 12099.333333333334 best_res: 228986.43866100002
+% Egipt avg_res: 189097.36425066614 avg_num_steps: 10382.333333333334 best_res: 186587.64415899917
+% Tanzania avg_res: 197495.40 avg_num_steps: 4232.20 best_res: 196949
+% Kanada avg_res: 1416488.80 avg_num_steps: 6797.60 best_res: 1405432
+\begin{figure}[h!]
+    \centering
+    % Pierwszy wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/11.png}
+        \caption{Średnie rozwiązanie}
+        \label{fig:wykres1}
+    \end{subfigure}
+    \hfill % Rozsuwa wykresy na całą szerokość tekstu
+    % Drugi wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/12.png}
+        \caption{Średnia ilość kroków}
+        \label{fig:wykres2}
+    \end{subfigure}
+    \hfill
+    % Trzeci wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/13.png}
+        \caption{Najlepszy rezultat}
+        \label{fig:wykres3}
+    \end{subfigure}
+    
+    \caption{Porównanie wyników algorytmu dla wybranych państw}
+    \label{fig:wszystkie_wykresy}
+\end{figure}
+
+\subsection*{Analiza wyników}
+
+Analiza uzyskanych wyników pozwala na wyciągnięcie wniosków dotyczących charakterystyki działania algorytmu Local Search w zależności od skali problemu. Zaobserwowane różnice w wynikach są w pełni zgodne z intuicją i wynikają bezpośrednio ze specyfiki badanych instancji:
+
+\begin{itemize}
+    \item \textbf{Skala wartości funkcji celu:} Wyższe wartości parametrów \textit{avg\_res} oraz \textit{best\_res} dla państw takich jak Kanada, w porównaniu do znacznie niższych wyników dla Dżibuti, nie świadczą o mniejszej skuteczności algorytmu. Wynikają one bezpośrednio z rozmiaru problemu – większa liczba miast rozmieszczonych na większym obszarze geograficznym naturalnie generuje wyższy koszt całkowity (sumę odległości), co jest zjawiskiem spodziewanym.
+    
+    \item \textbf{Złożoność obliczeniowa a liczba kroków:} Liczba kroków potrzebna do osiągnięcia poprawy (\textit{avg\_num\_steps}) rośnie wraz ze wzrostem liczby miast w danej instancji. Jest to spowodowane większą złożonością przestrzeni poszukiwań – im więcej miast posiada dany kraj, tym więcej istnieje potencjalnych możliwości zamiany połączeń i ścieżek poprawy, co naturalnie wydłuża proces zbieżności algorytmu do lokalnego optimum.
+    
+    \item \textbf{Charakterystyka instancji:} Przypadek Dżibuti, charakteryzujący się bardzo małą liczbą kroków i niskim wynikiem, potwierdza, że dla niewielkich zbiorów danych algorytm Local Search błyskawicznie przeszukuje dostępną przestrzeń rozwiązań. Z kolei instancje takie jak Kanada, Egipt czy Irlandia wymagają znacznie większego nakładu pracy, co odzwierciedla ich wysoką złożoność kombinatoryczną.
+    
+    \item \textbf{Stabilność i skalowalność:} Algorytm wykazuje dużą stabilność, o czym świadczy niewielka różnica między wynikami średnimi a najlepszymi dla każdej z instancji. Potwierdza to, że Local Search jest narzędziem skalowalnym, które w przewidywalny sposób dostosowuje swój czas pracy i jakość rozwiązań do rozmiaru wejściowego problemu optymalizacyjnego.
+\end{itemize}
+
+\section*{Zadanie 2}
+Zmiana względem zadania 1 polega na przyspieszeniu obliczeń: zamiast sprawdzać wszystkie możliwe sąsiedztwa w jednym kroku, wybieramy najlepsze z n losowych.
+Dzięki takiemu podejściu, algorytm jest w stanie szybciej znaleźć względnie dobre rozwiązanie, choć może nie być tak dokładny jak w przypadku pełnego przeszukiwania sąsiedztwa.
+% WYNIKI do wykresu:
+% Oman avg_res: 140871.20 avg_num_steps: 3010.20 best_res: 136735
+% Dżibuti avg res:11354.00 avg_num_steps: 28.80 best_res: 8644
+% Irlandia avg_res: 405960.40 avg_num_steps: 12356.60 best_res: 393356
+% Egipt avg_res: 296658.20 avg_num_steps: 10888.80best_res: 276573
+% Tanzania avg_res: 320460.60 avg_num_steps: 4497.80 best_res: 287197
+% Kanada avg_res: 2251333.00 avg_num_steps: 7219.80 best_res: 2196570
+
+\begin{figure}[h!]
+    \centering
+    % Pierwszy wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/21.png}
+        \caption{Średnie rozwiązanie}
+        \label{fig:wykres1}
+    \end{subfigure}
+    \hfill % Rozsuwa wykresy na całą szerokość tekstu
+    % Drugi wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/22.png}
+        \caption{Średnia ilość kroków}
+        \label{fig:wykres2}
+    \end{subfigure}
+    \hfill
+    % Trzeci wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/23.png}
+        \caption{Najlepszy rezultat}
+        \label{fig:wykres3}
+    \end{subfigure}
+    
+    \caption{Porównanie wyników algorytmu dla wybranych państw}
+    \label{fig:wszystkie_wykresy}
+\end{figure}
+
+\newpage
+\section*{Zadanie 3}
+Zmiana względem poprzedniego podejścia polega na wykorzystaniu Minimalnego Drzewa Rozpinającego (MST) jako bazy do budowy trasy. 
+Zamiast zaczynać od całkowicie losowej kolejności miast, najpierw wyliczamy MST, a potem na jego podstawie tworzymy cykl startowy. 
+Całą procedurę powtarzamy $\lceil \sqrt{n} \rceil$ razy, za każdym razem losując inny wierzchołek, od którego zaczynamy obchodzić drzewo. 
+Dzięki temu Local Search nie startuje "w ciemno", tylko dostaje na wejściu już całkiem sensownie poukładaną trasę. 
+Pozwala to algorytmowi szybciej dotrzeć do dobrych wyników i sprawdzić różne warianty przejścia tej samej struktury drzewa, 
+co zwiększa szansę na znalezienie lepszego rozwiązania końcowego.
+
+% WYNIKI do wykresu:
+% Oman avg_res: 93088.56 avg_num_steps: 532.51 best_res: 92155
+% Dżibuti avg res:6738.29 avg_num_steps: 12.00 best_res: 6656
+% Irlandia avg_res: 225023.76 avg_num_steps: 2161.57 best_res: 224454
+% Egipt avg_res: 184201.66 avg_num_steps: 1894.33 best_res: 183905
+% Tanzania avg_res: 193849.79 avg_num_steps: 784.04 best_res: 192973
+% Kanada avg_res: 1414883.52 avg_num_steps: 1146.57 best_res: 1410394
+\begin{figure}[h!]
+    \centering
+    % Pierwszy wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/31.png}
+        \caption{Średnie rozwiązanie}
+        \label{fig:wykres1}
+    \end{subfigure}
+    \hfill % Rozsuwa wykresy na całą szerokość tekstu
+    % Drugi wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/32.png}
+        \caption{Średnia ilość kroków}
+        \label{fig:wykres2}
+    \end{subfigure}
+    \hfill
+    % Trzeci wykres
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_1/charts/33.png}
+        \caption{Najlepszy rezultat}
+        \label{fig:wykres3}
+    \end{subfigure}
+    
+    \caption{Porównanie wyników algorytmu dla wybranych państw}
+    \label{fig:wszystkie_wykresy}
+\end{figure}
+
+\section*{Wnioski}
+
+Na podstawie wyników uzyskanych przy użyciu algorytmu opartego na Minimalnym Drzewie Rozpinającym (MST) sformułowano następujące spostrzeżenia:
+
+\begin{itemize}
+    \item \textbf{Naturalna skala problemu:} Podobnie jak w poprzednich zadaniach, wielkość państwa bezpośrednio przekłada się na wartość rozwiązania. Kanada, jako największa instancja, generuje najwyższy koszt trasy, natomiast Dżibuti najniższy, co jest całkowicie zgodne z intuicją.
+    
+    \item \textbf{Znaczne przyspieszenie zbieżności:} Wykorzystanie MST jako punktu startowego drastycznie zmniejszyło liczbę kroków potrzebnych do znalezienia rozwiązania. 
+    
+    \item \textbf{Złożoność a liczba kroków:} Mimo że Kanada ma najwyższą wartość rozwiązania, to Irlandia i Egipt wymagają najwięcej kroków poprawy. Potwierdza to wniosek, że trudność optymalizacji zależy od gęstości i układu miast w danym kraju, a nie od samej sumy odległości.
+    
+    \item \textbf{Wysoka powtarzalność:} Wyniki średnie (\textit{avg\_res}) są bardzo zbliżone do wyników najlepszych (\textit{best\_res}). Dzięki temu, że Local Search startuje z solidnego fundamentu (MST), algorytm jest stabilny i za każdym razem trafia w wysokiej jakości optima lokalne.
+\end{itemize}
+
+\end{document} 

@@ -1,0 +1,4 @@
+--- PODSUMOWANIE DLA 5 URUCHOMIEŃ ---
+Średnia wartość uzyskanego rozwiązania: 229621.5661093335
+Średnia liczba kroków poprawy: 12099.333333333334
+Najlepsze uzyskane rozwiązanie: 228986.43866100002
