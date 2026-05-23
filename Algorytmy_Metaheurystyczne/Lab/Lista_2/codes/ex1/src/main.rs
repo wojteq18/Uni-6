@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{BufReader, BufRead};
 use rand::Rng;
 use rand::thread_rng;
+use rand::prelude::*; //you can limit this import to just the shuffle function if needed
 
 #[derive(Debug, Clone)]
 struct City {
@@ -102,8 +103,10 @@ fn count_dist_matrix(cities: &[City]) -> Vec<Vec<u64>> {
 }
 
 fn simulated_annealing(cities: &[City], dist_matrix: &[Vec<u64>]) -> Permutation {
+    let mut rng = thread_rng();
     let n = cities.len();
     let mut current_perm = Permutation { route: (0..n).collect() };
+    current_perm.route.shuffle(&mut rng);
     let mut best_perm = current_perm.clone();
     
     let mut current_distance = current_perm.distance(dist_matrix);
@@ -140,7 +143,7 @@ fn simulated_annealing(cities: &[City], dist_matrix: &[Vec<u64>]) -> Permutation
 }
 
 fn main() {
-    let cities = load_data("/home/wojteq18/Uni-6/Algorytmy_Metaheurystyczne/Lab/Lista_2/data/djibouti.tsp");
+    let cities = load_data("../../data/djibouti.tsp");
     let dist_matrix = count_dist_matrix(&cities);
     let best_solution = simulated_annealing(&cities, &dist_matrix);
     println!("Best route: {:?}", best_solution.route);
