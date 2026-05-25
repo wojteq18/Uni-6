@@ -1,0 +1,1 @@
+Uruchamiam Tabu Search 2 razy... (Zalecane: cargo run --release)

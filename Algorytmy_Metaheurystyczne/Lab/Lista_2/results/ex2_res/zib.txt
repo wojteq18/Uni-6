@@ -1,0 +1,17 @@
+Tabu tenure: 10, max_stagnation:  50 => Dystans: 101154
+Tabu tenure: 20, max_stagnation:  50 => Dystans: 101295
+Tabu tenure: 30, max_stagnation:  50 => Dystans: 100272
+Tabu tenure: 40, max_stagnation:  50 => Dystans: 101569
+Tabu tenure: 50, max_stagnation:  50 => Dystans: 101030
+Tabu tenure: 10, max_stagnation: 100 => Dystans: 101613
+Tabu tenure: 20, max_stagnation: 100 => Dystans: 101810
+Tabu tenure: 30, max_stagnation: 100 => Dystans: 101290
+Tabu tenure: 40, max_stagnation: 100 => Dystans: 100869
+Tabu tenure: 50, max_stagnation: 100 => Dystans: 101224
+Tabu tenure: 10, max_stagnation: 150 => Dystans: 100413
+Tabu tenure: 20, max_stagnation: 150 => Dystans: 101004
+Tabu tenure: 30, max_stagnation: 150 => Dystans: 100242
+Tabu tenure: 40, max_stagnation: 150 => Dystans: 101078
+Tabu tenure: 50, max_stagnation: 150 => Dystans: 101265
+Tabu tenure: 10, max_stagnation: 200 => Dystans: 101321
+Tabu tenure: 20, max_stagnation: 200 => Dystans: 99539

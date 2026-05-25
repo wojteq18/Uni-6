@@ -1,0 +1,54 @@
+import re
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+data = """
+Temperatura początkowa:    100.0, cooling_rate: 0.800 => Dystans: 7901
+Temperatura początkowa:   1000.0, cooling_rate: 0.800 => Dystans: 7181
+Temperatura początkowa:  10000.0, cooling_rate: 0.800 => Dystans: 6841
+Temperatura początkowa: 100000.0, cooling_rate: 0.800 => Dystans: 7822
+Temperatura początkowa:    100.0, cooling_rate: 0.845 => Dystans: 7638
+Temperatura początkowa:   1000.0, cooling_rate: 0.845 => Dystans: 7457
+Temperatura początkowa:  10000.0, cooling_rate: 0.845 => Dystans: 7877
+Temperatura początkowa: 100000.0, cooling_rate: 0.845 => Dystans: 6995
+Temperatura początkowa:    100.0, cooling_rate: 0.890 => Dystans: 7261
+Temperatura początkowa:   1000.0, cooling_rate: 0.890 => Dystans: 6710
+Temperatura początkowa:  10000.0, cooling_rate: 0.890 => Dystans: 6659
+Temperatura początkowa: 100000.0, cooling_rate: 0.890 => Dystans: 7197
+Temperatura początkowa:    100.0, cooling_rate: 0.935 => Dystans: 6656
+Temperatura początkowa:   1000.0, cooling_rate: 0.935 => Dystans: 6657
+Temperatura początkowa:  10000.0, cooling_rate: 0.935 => Dystans: 6656
+Temperatura początkowa: 100000.0, cooling_rate: 0.935 => Dystans: 6808
+Temperatura początkowa:    100.0, cooling_rate: 0.980 => Dystans: 7075
+Temperatura początkowa:   1000.0, cooling_rate: 0.980 => Dystans: 6656
+Temperatura początkowa:  10000.0, cooling_rate: 0.980 => Dystans: 7152
+Temperatura początkowa: 100000.0, cooling_rate: 0.980 => Dystans: 6656
+Best route: [3, 1, 0, 9, 13, 20, 28, 29, 31, 34, 36, 37, 32, 33, 35, 30, 26, 27, 23, 21, 24, 25, 22, 19, 14, 12, 15, 16, 17, 18, 10, 11, 8, 7, 6, 5, 4, 2]
+Best distance: 6656
+"""
+
+parsed_data = []
+pattern = r"Temperatura początkowa:\s+([\d\.]+),\s+cooling_rate:\s+([\d\.]+)\s+=>\s+Dystans:\s+(\d+)"
+
+for line in data.strip().split('\n'):
+    match = re.search(pattern, line)
+    if match:
+        temp = float(match.group(1))
+        cr = float(match.group(2))
+        dist = int(match.group(3))
+        parsed_data.append({'Temperatura początkowa': temp, 'Cooling Rate': cr, 'Dystans': dist})
+
+df = pd.DataFrame(parsed_data)
+pivot_df = df.pivot(index="Cooling Rate", columns="Temperatura początkowa", values="Dystans")
+
+plt.figure(figsize=(10, 6))
+ax = sns.heatmap(pivot_df, annot=True, fmt="d", cmap="YlGnBu", cbar_kws={'label': 'Dystans'})
+ax.invert_yaxis()
+
+plt.title("Dżibuti", fontsize=16, pad=15)
+plt.xlabel("Temperatura początkowa", fontsize=12)
+plt.ylabel("Cooling Rate", fontsize=12)
+
+plt.tight_layout()
+plt.show()

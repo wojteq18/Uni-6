@@ -105,48 +105,66 @@ fn count_dist_matrix(cities: &[City]) -> Vec<Vec<u64>> {
 fn simulated_annealing(cities: &[City], dist_matrix: &[Vec<u64>]) -> Permutation {
     let mut rng = thread_rng();
     let n = cities.len();
-    let mut current_perm = Permutation { route: (0..n).collect() };
-    current_perm.route.shuffle(&mut rng);
-    let mut best_perm = current_perm.clone();
-    
-    let mut current_distance = current_perm.distance(dist_matrix);
-    let mut best_distance = current_distance;
-    
-    let mut temperature = 100000.0;
-    let cooling_rate = 0.995;
     let attempts_per_epoch = 100; 
+    
+    let mut global_best_perm = Permutation { route: (0..n).collect() };
+    let mut global_best_distance = u64::MAX;
 
-    while temperature > 1.0 {
-        for _ in 0..attempts_per_epoch {
-            let (i, j) = random_two_idx(n);
-            let mut new_perm = current_perm.clone();
-            new_perm.invert(i, j);
+    let mut init_temperature = 100.0;
+    let mut cooling_rate = 0.80;
 
-            let new_distance = new_perm.distance(dist_matrix);
+    for _ in 0..20 {
+        let mut current_perm = Permutation { route: (0..n).collect() };
+        current_perm.route.shuffle(&mut rng);
+        let mut best_perm = current_perm.clone();
+        
+        let mut current_distance = current_perm.distance(dist_matrix);
+        let mut best_distance = current_distance;
+        
+        let mut temperature = init_temperature;
 
-            if count_probability(current_distance, new_distance, temperature) > thread_rng().r#gen() {
-                // Akceptacja: aktualizujemy bieżący stan i dystans
-                current_perm = new_perm;
-                current_distance = new_distance; 
-                
-                if current_distance < best_distance {
-                    best_perm = current_perm.clone();
-                    best_distance = current_distance;
+        while temperature > 1.0 {
+            for _ in 0..attempts_per_epoch {
+                let (i, j) = random_two_idx(n);
+                let mut new_perm = current_perm.clone();
+                new_perm.invert(i, j);
+
+                let new_distance = new_perm.distance(dist_matrix);
+
+                if count_probability(current_distance, new_distance, temperature) > thread_rng().r#gen() {
+                    current_perm = new_perm;
+                    current_distance = new_distance; 
+                    
+                    if current_distance < best_distance {
+                        best_perm = current_perm.clone();
+                        best_distance = current_distance;
+                    }
                 }
             }
+            temperature *= cooling_rate;
+        }
+        
+        println!("Temperatura początkowa: {:>8.1}, cooling_rate: {:.3} => Dystans: {}", init_temperature, cooling_rate, best_distance);
+
+        if best_distance < global_best_distance {
+            global_best_distance = best_distance;
+            global_best_perm = best_perm;
         }
 
-        temperature *= cooling_rate;
+        init_temperature *= 10.0;
+        if init_temperature > 100000.0 {
+            init_temperature = 100.0;
+            cooling_rate += 0.045;
+        }
     }
 
-    best_perm
+    global_best_perm
 }
 
 fn main() {
-    let cities = load_data("../../data/djibouti.tsp");
+    let cities = load_data("../../data/qatar.tsp");
     let dist_matrix = count_dist_matrix(&cities);
     let best_solution = simulated_annealing(&cities, &dist_matrix);
     println!("Best route: {:?}", best_solution.route);
     println!("Best distance: {}", best_solution.distance(&dist_matrix));
-
 }

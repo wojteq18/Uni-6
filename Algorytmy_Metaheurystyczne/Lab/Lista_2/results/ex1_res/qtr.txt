@@ -1,0 +1,22 @@
+Temperatura początkowa:    100.0, cooling_rate: 0.800 => Dystans: 33026
+Temperatura początkowa:   1000.0, cooling_rate: 0.800 => Dystans: 27852
+Temperatura początkowa:  10000.0, cooling_rate: 0.800 => Dystans: 29923
+Temperatura początkowa: 100000.0, cooling_rate: 0.800 => Dystans: 30271
+Temperatura początkowa:    100.0, cooling_rate: 0.845 => Dystans: 27573
+Temperatura początkowa:   1000.0, cooling_rate: 0.845 => Dystans: 26649
+Temperatura początkowa:  10000.0, cooling_rate: 0.845 => Dystans: 27812
+Temperatura początkowa: 100000.0, cooling_rate: 0.845 => Dystans: 25855
+Temperatura początkowa:    100.0, cooling_rate: 0.890 => Dystans: 23679
+Temperatura początkowa:   1000.0, cooling_rate: 0.890 => Dystans: 22159
+Temperatura początkowa:  10000.0, cooling_rate: 0.890 => Dystans: 22237
+Temperatura początkowa: 100000.0, cooling_rate: 0.890 => Dystans: 21620
+Temperatura początkowa:    100.0, cooling_rate: 0.935 => Dystans: 20028
+Temperatura początkowa:   1000.0, cooling_rate: 0.935 => Dystans: 17999
+Temperatura początkowa:  10000.0, cooling_rate: 0.935 => Dystans: 17779
+Temperatura początkowa: 100000.0, cooling_rate: 0.935 => Dystans: 17892
+Temperatura początkowa:    100.0, cooling_rate: 0.980 => Dystans: 13024
+Temperatura początkowa:   1000.0, cooling_rate: 0.980 => Dystans: 13418
+Temperatura początkowa:  10000.0, cooling_rate: 0.980 => Dystans: 13417
+Temperatura początkowa: 100000.0, cooling_rate: 0.980 => Dystans: 12967
+Best route: [151, 143, 140, 146, 150, 159, 165, 161, 166, 164, 167, 177, 179, 184, 169, 170, 192, 183, 174, 182, 178, 175, 171, 173, 172, 176, 180, 187, 188, 190, 191, 189, 186, 185, 193, 181, 168, 163, 162, 160, 155, 141, 137, 138, 153, 149, 152, 156, 145, 148, 136, 139, 144, 133, 126, 131, 129, 103, 110, 93, 89, 64, 19, 62, 35, 79, 86, 90, 92, 95, 94, 87, 82, 91, 96, 107, 106, 104, 105, 102, 115, 111, 109, 99, 83, 76, 78, 80, 72, 65, 60, 67, 69, 73, 71, 74, 75, 68, 32, 59, 27, 20, 17, 28, 21, 26, 36, 44, 56, 63, 66, 55, 53, 43, 48, 54, 49, 41, 11, 29, 30, 31, 40, 47, 52, 51, 57, 50, 38, 39, 33, 46, 42, 45, 37, 34, 18, 14, 9, 8, 4, 2, 1, 0, 3, 5, 7, 15, 12, 6, 23, 25, 16, 10, 13, 22, 24, 58, 84, 85, 97, 61, 88, 98, 100, 81, 70, 77, 101, 108, 112, 113, 125, 124, 118, 121, 117, 114, 116, 128, 120, 132, 122, 123, 127, 119, 134, 142, 147, 135, 130, 154, 157, 158]
+Best distance: 12967

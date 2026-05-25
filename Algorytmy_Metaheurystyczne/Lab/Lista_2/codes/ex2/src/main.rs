@@ -108,77 +108,63 @@ fn find_best_neighbour(permutation: &Permutation, dist_matrix: &[Vec<u64>], tabu
     best_move
 }
 
-//main function needs to be refactored (right now it is pretty messy), but im not motivated enough to do it ://
 fn main() {
-    let cities = load_data("../../data/djibouti.tsp");
+    let cities = load_data("../../data/zimbabwe.tsp");
     let n = cities.len();
     
     let dist_matrix = count_dist_matrix(&cities);
     let mut rng = thread_rng();
     
     let num_runs = 100;
-    let tabu_tenure = 20;
-    let max_stagnation = 100;
+    let stagnations = [50, 100, 150, 200];
+    let tenures = [10, 20, 30, 40, 50];
 
-    let mut sum_of_distances: u64 = 0;
-    let mut sum_of_iterations: u64 = 0;
-    let mut global_best_distance: u64 = u64::MAX;
+    for &max_stagnation in &stagnations {
+        for &tabu_tenure in &tenures {
+            let mut best_param_distance = u64::MAX;
 
-    println!("Uruchamiam Tabu Search {} razy...", num_runs);
+            for _ in 0..num_runs {
+                let mut tabu_list: Vec<(usize, usize)> = Vec::new();
+                let mut route: Vec<usize> = (0..n).collect();
+                route.shuffle(&mut rng);
+                let mut permutation = Permutation { route };
+                
+                let mut current_dist = permutation.distance(&dist_matrix);
+                let mut best_run_distance = current_dist;
+                
+                let mut stagnation_counter = 0;
+                
+                loop {
+                    if let Some((i, j)) = find_best_neighbour(&permutation, &dist_matrix, &tabu_list) {
+                        tabu_list.push((i, j));
+                        if tabu_list.len() > tabu_tenure {
+                            tabu_list.remove(0);
+                        }
 
-    for run in 0..num_runs {
-        let mut tabu_list: Vec<(usize, usize)> = Vec::new();
-        let mut route: Vec<usize> = (0..n).collect();
-        route.shuffle(&mut rng);
-        let mut permutation = Permutation { route };
-        
-        let mut current_dist = permutation.distance(&dist_matrix);
-        let mut best_run_distance = current_dist;
-        
-        let mut iteration = 0;
-        let mut stagnation_counter = 0;
-        
-        loop {
-            if let Some((i, j)) = find_best_neighbour(&permutation, &dist_matrix, &tabu_list) {
-                tabu_list.push((i, j));
-                if tabu_list.len() > tabu_tenure {
-                    tabu_list.remove(0);
+                        permutation.invert(i, j);
+                        current_dist = permutation.distance(&dist_matrix);
+
+                        if current_dist < best_run_distance {
+                            best_run_distance = current_dist;
+                            stagnation_counter = 0;
+                        } else {
+                            stagnation_counter += 1;
+                        }
+
+                        if stagnation_counter >= max_stagnation {
+                            break;
+                        }
+                    } else {
+                        break; 
+                    }
                 }
-
-                permutation.invert(i, j);
-                current_dist = permutation.distance(&dist_matrix);
-                iteration += 1;
-
-                if current_dist < best_run_distance {
-                    best_run_distance = current_dist;
-                    stagnation_counter = 0;
-                } else {
-                    stagnation_counter += 1;
+                
+                if best_run_distance < best_param_distance {
+                    best_param_distance = best_run_distance;
                 }
-
-                if stagnation_counter >= max_stagnation {
-                    break;
-                }
-            } else {
-                break; 
             }
-        }
-        
-        println!("Przejście {}: Dystans = {}, Kroki = {}", run + 1, best_run_distance, iteration);
-
-        sum_of_distances += best_run_distance;
-        sum_of_iterations += iteration;
-        
-        if best_run_distance < global_best_distance {
-            global_best_distance = best_run_distance;
+            
+            println!("Tabu tenure: {:>2}, max_stagnation: {:>3} => Dystans: {}", tabu_tenure, max_stagnation, best_param_distance);
         }
     }
-    
-    let avg_distance = sum_of_distances as f64 / num_runs as f64;
-    let avg_iterations = sum_of_iterations as f64 / num_runs as f64;
-
-    println!("Podsumowanie dla {num_runs} przejść:");
-    println!("Średnia wartość uzyskanego rozwiązania: {:.2}", avg_distance);
-    println!("Średnia liczba kroków poprawy: {:.2}", avg_iterations);
-    println!("Najlepsze uzyskane rozwiązanie: {}", global_best_distance);
 }
